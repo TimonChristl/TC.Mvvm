@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>TC.Logging</id>
+        <version>@VERSION@</version>
+        <authors>Timon Christl</authors>
+        <owners>Timon Christl</owners>
+        <projectUrl>https://github.com/TimonChristl/TC.Logging</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Timon Christl's logging library</description>
+        <releaseNotes />
+        <copyright>©2015 by Timon Christl</copyright>
+        <dependencies />
+    </metadata>
+    <files>
+        <file src="TC.Logging\bin\Release\TC.Logging.dll" target="lib\net40\TC.Logging.dll" />
+        <file src="TC.Logging\bin\Release\TC.Logging.xml" target="lib\net40\TC.Logging.xml" />
+    </files>
+</package>
