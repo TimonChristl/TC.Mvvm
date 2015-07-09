@@ -13,7 +13,7 @@
         <dependencies />
     </metadata>
     <files>
-        <file src="TC.Mvvm\bin\Release\TC.Logging.dll" target="lib\net40\TC.Mvvm.dll" />
-        <file src="TC.Mvvm\bin\Release\TC.Logging.xml" target="lib\net40\TC.Mvvm.xml" />
+        <file src="TC.Mvvm\bin\Release\TC.Mvvm.dll" target="lib\net40\TC.Mvvm.dll" />
+        <file src="TC.Mvvm\bin\Release\TC.Mvvm.xml" target="lib\net40\TC.Mvvm.xml" />
     </files>
 </package>

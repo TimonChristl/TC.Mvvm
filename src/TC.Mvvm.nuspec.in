@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>TC.Logging</id>
+        <id>TC.Mvvm</id>
         <version>@VERSION@</version>
         <authors>Timon Christl</authors>
         <owners>Timon Christl</owners>
@@ -13,7 +13,7 @@
         <dependencies />
     </metadata>
     <files>
-        <file src="TC.Logging\bin\Release\TC.Logging.dll" target="lib\net40\TC.Logging.dll" />
-        <file src="TC.Logging\bin\Release\TC.Logging.xml" target="lib\net40\TC.Logging.xml" />
+        <file src="TC.Mvvm\bin\Release\TC.Mvvm.dll" target="lib\net40\TC.Mvvm.dll" />
+        <file src="TC.Mvvm\bin\Release\TC.Mvvm.xml" target="lib\net40\TC.Mvvm.xml" />
     </files>
 </package>
