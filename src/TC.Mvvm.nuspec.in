@@ -5,9 +5,9 @@
         <version>@VERSION@</version>
         <authors>Timon Christl</authors>
         <owners>Timon Christl</owners>
-        <projectUrl>https://github.com/TimonChristl/TC.Logging</projectUrl>
+        <projectUrl>https://github.com/TimonChristl/TC.Mvvm</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Timon Christl's logging library</description>
+        <description>Timon Christl's MVVM utilities library</description>
         <releaseNotes />
         <copyright>©2015 by Timon Christl</copyright>
         <dependencies />
