@@ -29,12 +29,14 @@ namespace TC.Mvvm
 
 		private class Step
 		{
+            public string Description;
 			public TMemento Before;
 			public BaseOperator<TContext>[] Operators;
 			public TMemento After;
 
-			public Step(BaseOperator<TContext>[] operators)
+			public Step(string description, BaseOperator<TContext>[] operators)
 			{
+                this.Description = description;
 				this.Operators = operators;
 			}
 		}
@@ -66,44 +68,78 @@ namespace TC.Mvvm
 			OnChanged();
 		}
 
-		/// <summary>
-		/// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
-		/// step is created by calling <see cref="CreateMemento()"/>.
-		/// The new step is pushed onto the stack of applied steps, and the stack of unapplied steps is cleared.
-		/// </summary>
-		/// <remarks>
-		/// Use this overload when the "before" memento should reflect the current state.
-		/// If no operators are supplied, this method does nothing.
-		/// </remarks>
-		/// <param name="operators"></param>
-		public void Add(params BaseOperator<TContext>[] operators)
+        /// <summary>
+        /// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
+        /// step is created by calling <see cref="CreateMemento()"/>.
+        /// The new step is pushed onto the stack of applied steps, and the stack of unapplied steps is cleared.
+        /// </summary>
+        /// <remarks>
+        /// Use this overload when the "before" memento should reflect the current state.
+        /// If no operators are supplied, this method does nothing.
+        /// </remarks>
+        /// <param name="operators"></param>
+        public void Add(params BaseOperator<TContext>[] operators)
+        {
+            AddCore(null, null, operators);
+        }
+
+        /// <summary>
+        /// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
+        /// step is set to the supplied memento.
+        /// The new step is pushed onto the stack of applied steps, and the stack of unapplied steps is cleared.
+        /// </summary>
+        /// <remarks>
+        /// Use this overload when the "before" memento needs to reflect an earlier state than the one at the
+        /// time this method is called.
+        /// If no operators are supplied, this method does nothing.
+        /// </remarks>
+        /// <param name="beforeMemento"></param>
+        /// <param name="operators"></param>
+        public void Add(TMemento beforeMemento, params BaseOperator<TContext>[] operators)
+        {
+            AddCore(null, CreateMemento(context), operators);
+        }
+
+        /// <summary>
+        /// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
+        /// step is created by calling <see cref="CreateMemento()"/>.
+        /// The new step is pushed onto the stack of applied steps, and the stack of unapplied steps is cleared.
+        /// </summary>
+        /// <remarks>
+        /// Use this overload when the "before" memento should reflect the current state.
+        /// If no operators are supplied, this method does nothing.
+        /// </remarks>
+        /// <param name="description"></param>
+        /// <param name="operators"></param>
+        public void Add(string description, params BaseOperator<TContext>[] operators)
 		{
-			AddCore(null, operators);
+			AddCore(description, null, operators);
 		}
 
-		/// <summary>
-		/// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
-		/// step is set to the supplied memento.
-		/// The new step is pushed onto the stack of applied steps, and the stack of unapplied steps is cleared.
-		/// </summary>
-		/// <remarks>
-		/// Use this overload when the "before" memento needs to reflect an earlier state than the one at the
-		/// time this method is called.
-		/// If no operators are supplied, this method does nothing.
-		/// </remarks>
-		/// <param name="beforeMemento"></param>
-		/// <param name="operators"></param>
-		public void Add(TMemento beforeMemento, params BaseOperator<TContext>[] operators)
+        /// <summary>
+        /// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
+        /// step is set to the supplied memento.
+        /// The new step is pushed onto the stack of applied steps, and the stack of unapplied steps is cleared.
+        /// </summary>
+        /// <remarks>
+        /// Use this overload when the "before" memento needs to reflect an earlier state than the one at the
+        /// time this method is called.
+        /// If no operators are supplied, this method does nothing.
+        /// </remarks>
+        /// <param name="description"></param>
+        /// <param name="beforeMemento"></param>
+        /// <param name="operators"></param>
+        public void Add(string description, TMemento beforeMemento, params BaseOperator<TContext>[] operators)
 		{
-			AddCore(CreateMemento(context), operators);
+			AddCore(description, CreateMemento(context), operators);
 		}
 
-		private void AddCore(TMemento beforeMemento, BaseOperator<TContext>[] operators)
+		private void AddCore(string description, TMemento beforeMemento, BaseOperator<TContext>[] operators)
 		{
 			if(operators.Length == 0)
 				return;
 
-			Step step = new Step(operators);
+			Step step = new Step(description, operators);
 
 			step.Before = beforeMemento;
 
@@ -206,18 +242,52 @@ namespace TC.Mvvm
 			get { return appliedSteps.Count > 0; }
 		}
 
-		/// <summary>
-		/// Gets whether redo is possible. Redo is possible if the stack of unapplied steps is non-empty.
-		/// </summary>
-		public bool CanRedo
+        /// <summary>
+        /// Gets whether redo is possible. Redo is possible if the stack of unapplied steps is non-empty.
+        /// </summary>
+        public bool CanRedo
 		{
 			get { return unappliedSteps.Count > 0; }
 		}
 
-		/// <summary>
-		/// Fires the <see cref="Changed"/> event.
-		/// </summary>
-		protected virtual void OnChanged()
+        /// <summary>
+        /// Description of the step that will be unapplied if <see cref="Undo"/> is be called, or <c>null</c>,
+        /// if no such step exists.
+        /// </summary>
+        /// <returns></returns>
+        public string UndoDescription
+        {
+            get
+            {
+                if(appliedSteps.Count == 0)
+                    return null;
+
+                var step = appliedSteps.Peek();
+                return step.Description;
+            }
+        }
+
+        /// <summary>
+        /// Description of the step that will be applied if <see cref="Redo"/> is be called, or <c>null</c>,
+        /// if no such step exists.
+        /// </summary>
+        /// <returns></returns>
+        public string RedoDescription
+        {
+            get
+            {
+                if(unappliedSteps.Count == 0)
+                    return null;
+
+                var step = unappliedSteps.Peek();
+                return step.Description;
+            }
+        }
+
+        /// <summary>
+        /// Fires the <see cref="Changed"/> event.
+        /// </summary>
+        protected virtual void OnChanged()
 		{
 			if(Changed != null)
 				Changed(this, EventArgs.Empty);
