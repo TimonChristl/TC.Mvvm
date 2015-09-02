@@ -80,7 +80,7 @@ namespace TC.Mvvm
         /// <param name="operators"></param>
         public void Add(params BaseOperator<TContext>[] operators)
         {
-            AddCore(null, null, operators);
+            AddCore(null, CreateMemento(context), operators);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace TC.Mvvm
         /// <param name="operators"></param>
         public void Add(TMemento beforeMemento, params BaseOperator<TContext>[] operators)
         {
-            AddCore(null, CreateMemento(context), operators);
+            AddCore(null, beforeMemento, operators);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace TC.Mvvm
         /// <param name="operators"></param>
         public void Add(string description, params BaseOperator<TContext>[] operators)
 		{
-			AddCore(description, null, operators);
+			AddCore(description, CreateMemento(context), operators);
 		}
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace TC.Mvvm
         /// <param name="operators"></param>
         public void Add(string description, TMemento beforeMemento, params BaseOperator<TContext>[] operators)
 		{
-			AddCore(description, CreateMemento(context), operators);
+			AddCore(description, beforeMemento, operators);
 		}
 
 		private void AddCore(string description, TMemento beforeMemento, BaseOperator<TContext>[] operators)
