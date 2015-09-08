@@ -80,7 +80,25 @@ namespace TC.Mvvm
         /// <param name="operators"></param>
         public void Add(params BaseOperator<TContext>[] operators)
         {
-            AddCore(null, CreateMemento(context), operators);
+            AddCore(null, CreateMemento(context), null, operators);
+        }
+
+        /// <summary>
+        /// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
+        /// step is created by calling <see cref="CreateMemento()"/>. The "after" memento is also created by calling
+        /// <see cref="CreateMemento()"/>. If <paramref name="afterMementoFinisher"/> is not <c>null</c>, it is
+        /// called with the "after" memento as argument.
+        /// The new step is pushed onto the stack of applied steps, and the stack of unapplied steps is cleared.
+        /// </summary>
+        /// <remarks>
+        /// Use this overload when the "before" memento should reflect the current state.
+        /// If no operators are supplied, this method does nothing.
+        /// </remarks>
+        /// <param name="afterMementoFinisher"></param>
+        /// <param name="operators"></param>
+        public void Add(Action<TMemento> afterMementoFinisher, params BaseOperator<TContext>[] operators)
+        {
+            AddCore(null, CreateMemento(context), afterMementoFinisher, operators);
         }
 
         /// <summary>
@@ -97,7 +115,27 @@ namespace TC.Mvvm
         /// <param name="operators"></param>
         public void Add(TMemento beforeMemento, params BaseOperator<TContext>[] operators)
         {
-            AddCore(null, beforeMemento, operators);
+            AddCore(null, beforeMemento, null, operators);
+        }
+
+        /// <summary>
+        /// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
+        /// step is set to the supplied memento. The "after" memento is created by calling
+        /// <see cref="CreateMemento()"/>. If <paramref name="afterMementoFinisher"/> is not <c>null</c>, it is
+        /// called with the "after" memento as argument.
+        /// The new step is pushed onto the stack of applied steps, and the stack of unapplied steps is cleared.
+        /// </summary>
+        /// <remarks>
+        /// Use this overload when the "before" memento needs to reflect an earlier state than the one at the
+        /// time this method is called.
+        /// If no operators are supplied, this method does nothing.
+        /// </remarks>
+        /// <param name="beforeMemento"></param>
+        /// <param name="afterMementoFinisher"></param>
+        /// <param name="operators"></param>
+        public void Add(TMemento beforeMemento, Action<TMemento> afterMementoFinisher, params BaseOperator<TContext>[] operators)
+        {
+            AddCore(null, beforeMemento, afterMementoFinisher, operators);
         }
 
         /// <summary>
@@ -113,8 +151,27 @@ namespace TC.Mvvm
         /// <param name="operators"></param>
         public void Add(string description, params BaseOperator<TContext>[] operators)
 		{
-			AddCore(description, CreateMemento(context), operators);
+			AddCore(description, CreateMemento(context), null, operators);
 		}
+
+        /// <summary>
+        /// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
+        /// step is created by calling <see cref="CreateMemento()"/>. The "after" memento is also created by calling
+        /// <see cref="CreateMemento()"/>. If <paramref name="afterMementoFinisher"/> is not <c>null</c>, it is
+        /// called with the "after" memento as argument.
+        /// The new step is pushed onto the stack of applied steps, and the stack of unapplied steps is cleared.
+        /// </summary>
+        /// <remarks>
+        /// Use this overload when the "before" memento should reflect the current state.
+        /// If no operators are supplied, this method does nothing.
+        /// </remarks>
+        /// <param name="description"></param>
+        /// <param name="afterMementoFinisher"></param>
+        /// <param name="operators"></param>
+        public void Add(string description, Action<TMemento> afterMementoFinisher, params BaseOperator<TContext>[] operators)
+        {
+            AddCore(description, CreateMemento(context), afterMementoFinisher, operators);
+        }
 
         /// <summary>
         /// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
@@ -131,10 +188,31 @@ namespace TC.Mvvm
         /// <param name="operators"></param>
         public void Add(string description, TMemento beforeMemento, params BaseOperator<TContext>[] operators)
 		{
-			AddCore(description, beforeMemento, operators);
+			AddCore(description, beforeMemento, null, operators);
 		}
 
-		private void AddCore(string description, TMemento beforeMemento, BaseOperator<TContext>[] operators)
+        /// <summary>
+        /// Add an undo step that encapsulates the supplied list of operators. The "before" memento for the
+        /// step is set to the supplied memento. The "after" memento is created by calling
+        /// <see cref="CreateMemento()"/>. If <paramref name="afterMementoFinisher"/> is not <c>null</c>, it is
+        /// called with the "after" memento as argument.
+        /// The new step is pushed onto the stack of applied steps, and the stack of unapplied steps is cleared.
+        /// </summary>
+        /// <remarks>
+        /// Use this overload when the "before" memento needs to reflect an earlier state than the one at the
+        /// time this method is called.
+        /// If no operators are supplied, this method does nothing.
+        /// </remarks>
+        /// <param name="description"></param>
+        /// <param name="beforeMemento"></param>
+        /// <param name="afterMementoFinisher"></param>
+        /// <param name="operators"></param>
+        public void Add(string description, TMemento beforeMemento, Action<TMemento> afterMementoFinisher, params BaseOperator<TContext>[] operators)
+        {
+            AddCore(description, beforeMemento, afterMementoFinisher, operators);
+        }
+
+        private void AddCore(string description, TMemento beforeMemento, Action<TMemento> afterMementoFinisher, BaseOperator<TContext>[] operators)
 		{
 			if(operators.Length == 0)
 				return;
@@ -165,8 +243,10 @@ namespace TC.Mvvm
 			}
 
 			step.After = CreateMemento(context);
+            if(afterMementoFinisher != null)
+                afterMementoFinisher(step.After);
 
-			OnPropertyChanged("CanUndo");
+            OnPropertyChanged("CanUndo");
 			OnPropertyChanged("CanRedo");
 			OnChanged();
 		}
