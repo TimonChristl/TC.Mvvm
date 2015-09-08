@@ -47,7 +47,11 @@
     <Compile Include="BaseModelObj.cs" />
     <Compile Include="BaseOperator.cs" />
     <Compile Include="BaseOperatorManager.cs" />
+    <Compile Include="DataPaths\DataPath.cs" />
+    <Compile Include="DataPaths\DataPathItem.cs" />
+    <Compile Include="DataPaths\IDataPathRoot.cs" />
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="DataPaths\IDataPathAddressable.cs" />
     <Compile Include="IHasOwner.cs" />
     <Compile Include="IIdIndexable.cs" />
     <Compile Include="ObservableCollectionSyncHelper.cs" />
@@ -55,6 +59,7 @@
     <Compile Include="ObservableCollectionWithOwnerIdIndexable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
