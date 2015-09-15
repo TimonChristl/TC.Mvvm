@@ -6,3 +6,6 @@
 /src/TC.Mvvm.v12.suo
 /src/TC.Mvvm/obj
 /src/TC.Mvvm/bin
+/src/TC.Mvvm.Tests/bin/Release
+/src/TC.Mvvm.Tests/obj/Release
+/src/.vs/TC.Mvvm/v14

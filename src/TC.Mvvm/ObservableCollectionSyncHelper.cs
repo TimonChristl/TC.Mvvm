@@ -29,6 +29,9 @@ namespace TC.Mvvm
 						dests.Add(createDestFromSource(source));
 					break;
 				case NotifyCollectionChangedAction.Move:
+                    //TODO: untested when more than one item is moved, but the stock ObservableCollection never fires such events anyway
+                    for(int i = 0; i < e.NewItems.Count; i++)
+                        dests.Move(e.OldStartingIndex + i, e.NewStartingIndex + i);
 					break;
 				case NotifyCollectionChangedAction.Remove:
 					foreach(TSource source in e.OldItems)
