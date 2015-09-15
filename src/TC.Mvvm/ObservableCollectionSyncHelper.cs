@@ -25,9 +25,12 @@ namespace TC.Mvvm
 			switch(e.Action)
 			{
 				case NotifyCollectionChangedAction.Add:
-					foreach(TSource source in e.NewItems)
-						dests.Add(createDestFromSource(source));
-					break;
+                    for(int i = 0; i < e.NewItems.Count; i++)
+                    {
+                        TSource source = (TSource)e.NewItems[i];
+                        dests.Insert(e.NewStartingIndex + i, createDestFromSource(source));
+                    }
+                    break;
 				case NotifyCollectionChangedAction.Move:
                     //TODO: untested when more than one item is moved, but the stock ObservableCollection never fires such events anyway
                     for(int i = 0; i < e.NewItems.Count; i++)
