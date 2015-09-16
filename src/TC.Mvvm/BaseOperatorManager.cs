@@ -42,23 +42,41 @@ namespace TC.Mvvm
 		}
 
 		private TContext context;
-		private Stack<Step> appliedSteps = new Stack<Step>();
+        private int maxSteps;
+        private Stack<Step> appliedSteps = new Stack<Step>();
 		private Stack<Step> unappliedSteps = new Stack<Step>();
 
 		/// <summary>
 		/// Creates a new base operator manager for the given context.
 		/// </summary>
 		/// <param name="context"></param>
-		public BaseOperatorManager(TContext context)
+		public BaseOperatorManager(TContext context, int maxSteps = int.MaxValue)
 		{
 			this.context = context;
+            this.maxSteps = maxSteps;
 			Clear();
 		}
 
-		/// <summary>
-		/// Clears both the stack of applied steps and the stack of unapplied steps.
-		/// </summary>
-		public void Clear()
+        public int MaxSteps
+        {
+            get { return maxSteps; }
+            set
+            {
+                if(value < 1)
+                    throw new ArgumentOutOfRangeException("value");
+
+                if(maxSteps != value)
+                {
+                    maxSteps = value;
+                    LimitAppliedStepsToMaxSteps();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clears both the stack of applied steps and the stack of unapplied steps.
+        /// </summary>
+        public void Clear()
 		{
 			this.appliedSteps.Clear();
 			this.unappliedSteps.Clear();
@@ -246,17 +264,32 @@ namespace TC.Mvvm
             if(afterMementoFinisher != null)
                 afterMementoFinisher(step.After);
 
+            LimitAppliedStepsToMaxSteps();
+
             OnPropertyChanged("CanUndo");
 			OnPropertyChanged("CanRedo");
 			OnChanged();
 		}
 
-		/// <summary>
-		/// Performs an undo by popping a step from the stack of applied steps, unapplying its
-		/// list of operators in reverse order, pushing the step onto the stack of unapplied steps,
-		/// and restoring the "before" memento of the step.
-		/// </summary>
-		public void Undo()
+        private void LimitAppliedStepsToMaxSteps()
+        {
+            if(appliedSteps.Count >= MaxSteps)
+            {
+                // Note: Stack<T>.ToArray() returns items in the order they would be popped (newest first).
+                // When pushing we need to push in reversed order (oldest first).
+                IEnumerable<Step> survivingAppliedSteps = appliedSteps.ToArray().Take(MaxSteps).Reverse();
+                appliedSteps.Clear();
+                foreach(Step step in survivingAppliedSteps)
+                    appliedSteps.Push(step);
+            }
+        }
+
+        /// <summary>
+        /// Performs an undo by popping a step from the stack of applied steps, unapplying its
+        /// list of operators in reverse order, pushing the step onto the stack of unapplied steps,
+        /// and restoring the "before" memento of the step.
+        /// </summary>
+        public void Undo()
 		{
 			Step step = this.appliedSteps.Pop();
 			this.unappliedSteps.Push(step);
