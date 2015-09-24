@@ -32,7 +32,8 @@ namespace TC.Mvvm
 			if(!equalityComparer.Equals(backingField, newValue))
 			{
 				backingField = newValue;
-				OnPropertyChanged(propertyName);
+                if(propertyName != null)
+                    OnPropertyChanged(propertyName);
 				if(!suppressModified)
 					OnModified();
 				return true;
