@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4CFB6399-C88E-47A8-837E-7AEAAF7FD7DD}</ProjectGuid>
+    <ProjectGuid>{9FC88041-EFF6-4650-92DB-A1C741CE95E0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TC.Mvvm.Tests</RootNamespace>
-    <AssemblyName>TC.Mvvm.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>TC.Mvvm.Injector.Tests</RootNamespace>
+    <AssemblyName>TC.Mvvm.Injector.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -50,16 +50,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="ObservableCollectionSyncHelperTests.cs" />
+    <Compile Include="InjectorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TC.Mvvm\TC.Mvvm.csproj">
-      <Project>{ab6fa15a-21b7-4858-b40a-24567385f333}</Project>
-      <Name>TC.Mvvm</Name>
+    <ProjectReference Include="..\TC.Mvvm.Injector\TC.Mvvm.Injector.csproj">
+      <Project>{32d2a9d7-b8a7-4d60-b0a8-8f9308b9b340}</Project>
+      <Name>TC.Mvvm.Injector</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

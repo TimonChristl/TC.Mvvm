@@ -9,9 +9,9 @@ using System.Runtime.InteropServices;
 #endif
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("TC.Mvvm")]
-[assembly: AssemblyCopyright("©2015 by Timon Christl")]
+[assembly: AssemblyCopyright("©2015-2016 by Timon Christl")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyVersion("0.1.14.0")]
-[assembly: AssemblyFileVersion("0.1.14.0")]
+[assembly: AssemblyVersion("0.2.0.0")]
+[assembly: AssemblyFileVersion("0.2.0.0")]

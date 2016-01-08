@@ -9,3 +9,7 @@
 /src/TC.Mvvm.Tests/bin/Release
 /src/TC.Mvvm.Tests/obj/Release
 /src/.vs/TC.Mvvm/v14
+/src/TC.Mvvm.Injector.Tests/obj/Release
+/src/TC.Mvvm.Injector.Tests/bin/Release
+/src/TC.Mvvm.Injector/obj/Release
+/src/TC.Mvvm.Injector/bin/Release
