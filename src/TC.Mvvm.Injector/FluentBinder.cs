@@ -8,39 +8,6 @@ namespace TC.Mvvm.Injector
 {
 
     /// <summary>
-    /// Context for evaluating conditions when selecting bindings.
-    /// </summary>
-    public class BindingConditionContext
-    {
-
-        private Type contractType;
-        private object enclosingInstance;
-
-        internal BindingConditionContext(Type contractType, object enclosingInstance)
-        {
-            this.contractType = contractType;
-            this.enclosingInstance = enclosingInstance;
-        }
-
-        /// <summary>
-        /// The contract type for which a binding is about to be selected.
-        /// </summary>
-        public Type ContractType
-        {
-            get { return contractType; }
-        }
-
-        /// <summary>
-        /// The enclosing instance for which a binding is about to be selected.
-        /// </summary>
-        public object EnclosingInstance
-        {
-            get { return enclosingInstance; }
-        }
-
-    }
-
-    /// <summary>
     /// Helper for defining bindings from binding contract types to instances.
     /// </summary>
     /// <typeparam name="TContract"></typeparam>
@@ -48,7 +15,7 @@ namespace TC.Mvvm.Injector
     {
 
         private Injector injector;
-        private Func<BindingConditionContext, bool> condition = null;
+        private Func<InjectorRequest, bool> condition = null;
 
         internal FluentBinder(Injector injector)
         {
@@ -118,13 +85,36 @@ namespace TC.Mvvm.Injector
         }
 
         /// <summary>
-        /// 
+        /// Defines a condition for the binding being constructed, using the non-strongly-typed version
+        /// of <see cref="InjectorRequest"/>. If multiple calls to If() are made for one
+        /// <see cref="FluentBinder{TContract}"/>, only the last defined condition will actually be applied.
         /// </summary>
+        /// <remarks>
+        /// Other this overload when the expected type of the enclosing object for the binding is not known in advance.
+        /// </remarks>
         /// <param name="condition"></param>
         /// <returns></returns>
-        public FluentBinder<TContract> If(Func<BindingConditionContext, bool> condition)
+        public FluentBinder<TContract> If(Func<InjectorRequest, bool> condition)
         {
             this.condition = condition;
+            return this;
+        }
+
+        /// <summary>
+        /// Defines a condition for the binding being constructed, using the strongly-typed version of
+        /// <see cref="InjectorRequest{TEnclosingObject}"/>. If multiple calls to If() are made for one
+        /// <see cref="FluentBinder{TContract}"/>, only the last defined condition will actually be applied.
+        /// </summary>
+        /// <remarks>
+        /// Use this overload when the expected type of the enclosing object for the binding is known in advance, as this
+        /// overload can save you an ugly cast when accessing the enclosing object.
+        /// If the actual type does not match the expected type, an <see cref="InvalidCastException"/> will be thrown.
+        /// </remarks>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public FluentBinder<TContract> If<TEnclosingObject>(Func<InjectorRequest<TEnclosingObject>, bool> condition)
+        {
+            this.condition = (request) => condition(new InjectorRequest<TEnclosingObject>(request.ContractType, (TEnclosingObject)request.EnclosingObject, request.Attribute));
             return this;
         }
 

@@ -17,9 +17,7 @@ namespace TC.Mvvm.Injector
             this.injector = injector;
         }
 
-        public abstract object GetInstance();
-
-        public abstract bool IsNewInstance { get; }
+        public abstract bool GetInstance(out object instance);
 
         protected Injector Injector
         {
@@ -36,12 +34,15 @@ namespace TC.Mvvm.Injector
         {
         }
 
-        public override object GetInstance()
+        public override bool GetInstance(out object instance)
         {
-            return GetInstanceCore();
+            T obj;
+            var result = GetInstanceCore(out obj);
+            instance = obj;
+            return result;
         }
 
-        public abstract T GetInstanceCore();
+        public abstract bool GetInstanceCore(out T instance);
 
     }
 
@@ -56,14 +57,10 @@ namespace TC.Mvvm.Injector
             this.instance = instance;
         }
 
-        public override T GetInstanceCore()
+        public override bool GetInstanceCore(out T instance)
         {
-            return instance;
-        }
-
-        public override bool IsNewInstance
-        {
-            get { return false; }
+            instance = this.instance;
+            return false;
         }
 
     }
@@ -84,28 +81,27 @@ namespace TC.Mvvm.Injector
             this.singleton = singleton;
         }
 
-        public override T GetInstanceCore()
+        public override bool GetInstanceCore(out T instance)
         {
             if(singleton)
             {
-                object instance;
-                if(!Injector.Singletons.TryGetValue(typeof(T), out instance))
+                bool singletonInstanceWasJustCreated = false;
+                object singletonInstance;
+                if(!Injector.Singletons.TryGetValue(typeof(T), out singletonInstance))
                 {
-                    instance = factory();
-                    Injector.Singletons.Add(typeof(T), instance);
+                    singletonInstance = factory();
+                    Injector.Singletons.Add(typeof(T), singletonInstance);
+                    singletonInstanceWasJustCreated = true;
                 }
 
-                return (T)instance;
+                instance = (T)singletonInstance;
+                return singletonInstanceWasJustCreated;
             }
             else
             {
-                return factory();
+                instance = factory();
+                return true;
             }
-        }
-
-        public override bool IsNewInstance
-        {
-            get { return !singleton; }
         }
 
     }

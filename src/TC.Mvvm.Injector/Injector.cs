@@ -16,21 +16,96 @@ namespace TC.Mvvm.Injector
 
         /// <summary>
         /// Gets an instance for the contract type <paramref name="contractType"/>.
-        /// <paramref name="enclosingInstance"/> is passed to the context for evaluating binding conditions.
         /// </summary>
         /// <param name="contractType"></param>
-        /// <param name="enclosingInstance"></param>
         /// <returns></returns>
-        object Get(Type contractType, object enclosingInstance = null);
+        object Get(Type contractType);
 
         /// <summary>
         /// Gets an instance for the contract type <typeparamref name="TContract"/>.
-        /// <paramref name="enclosingInstance"/> is passed to the context for evaluating binding conditions.
         /// </summary>
         /// <typeparam name="TContract"></typeparam>
-        /// <param name="enclosingInstance"></param>
         /// <returns></returns>
-        TContract Get<TContract>(object enclosingInstance = null);
+        TContract Get<TContract>();
+
+        /// <summary>
+        /// Resolves injected properties for the instance <paramref name="instance"/>. This method
+        /// is useful for cases when the instance is not obtained via injection, but still needs some
+        /// properties injected.
+        /// </summary>
+        /// <typeparam name="TInstance"></typeparam>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        TInstance Resolve<TInstance>(TInstance instance);
+
+    }
+
+    /// <summary>
+    /// An injector request for an instance of contract type (<see cref="ContractType"/>. The request can either be for
+    /// a top-level instance, or for an instance for a property attributed with <see cref="InjectAttribute"/> while resolving another object.
+    /// </summary>
+    public class InjectorRequest
+    {
+
+        private Type contractType;
+        private object enclosingObject;
+        private InjectAttribute attribute;
+
+        internal InjectorRequest(Type contractType, object enclosingObject, InjectAttribute attribute)
+        {
+            this.contractType = contractType;
+            this.enclosingObject = enclosingObject;
+            this.attribute = attribute;
+        }
+
+        /// <summary>
+        /// The contract type for the request.
+        /// </summary>
+        public Type ContractType
+        {
+            get { return contractType; }
+        }
+
+        /// <summary>
+        /// The object that contains the property for which the instance is requested.
+        /// If this property is <c>null</c>, then the requeust is for a top-level instance and not for a property, and <see cref="Attribute"/> is also <c>null</c>.
+        /// </summary>
+        public object EnclosingObject
+        {
+            get { return enclosingObject; }
+        }
+
+        /// <summary>
+        /// The <see cref="InjectAttribute"/> for the property for which the instance is requested.
+        /// If this property is <c>null</c>, then the request is for a top-level instance and not for a property, and <see cref="EnclosingObject"/> is also <c>null</c>.
+        /// </summary>
+        public InjectAttribute Attribute
+        {
+            get { return attribute; }
+        }
+
+    }
+
+    /// <summary>
+    /// A version of <see cref="InjectorRequest"/> that provides strongly-typed access to the <see cref="EnclosingObject"/> property.
+    /// </summary>
+    /// <typeparam name="TEnclosingObject"></typeparam>
+    public class InjectorRequest<TEnclosingObject> : InjectorRequest
+    {
+
+        internal InjectorRequest(Type contractType, TEnclosingObject enclosingObject, InjectAttribute attribute)
+            :base(contractType, enclosingObject, attribute)
+        {
+        }
+
+        /// <summary>
+        /// The strongly-typed object that contains the property for which the instance is requested.
+        /// If this property is <c>null</c>, then the requeust is for a top-level instance and not for a property, and <see cref="Attribute"/> is also <c>null</c>.
+        /// </summary>
+        public new TEnclosingObject EnclosingObject
+        {
+            get { return (TEnclosingObject)base.EnclosingObject; }
+        }
 
     }
 
@@ -42,12 +117,19 @@ namespace TC.Mvvm.Injector
 
         private class ConditionAndBinding
         {
-            public Func<BindingConditionContext, bool> Condition;
+            public Func<InjectorRequest, bool> Condition;
             public BaseBinding Binding;
+        }
+
+        private class PropertyInfoAndAttribute
+        {
+            public PropertyInfo PropertyInfo;
+            public InjectAttribute Attribute;
         }
 
         private Dictionary<Type, List<ConditionAndBinding>> bindings = new Dictionary<Type, List<ConditionAndBinding>>();
         private Dictionary<Type, object> singletons = new Dictionary<Type, object>();
+        private Dictionary<Type, PropertyInfoAndAttribute[]> injectedPropertiesCache = new Dictionary<Type, PropertyInfoAndAttribute[]>();
 
         /// <summary>
         /// Creates an instance of the fluent API helper for binding contract types to instances.
@@ -62,61 +144,59 @@ namespace TC.Mvvm.Injector
             return new FluentBinder<T>(this);
         }
 
-        #region IInjector Members
-
-        /// <inheritdoc/>
-        public object Get(Type contractType, object enclosingInstance = null)
+        private object GetCore(InjectorRequest request)
         {
             List<ConditionAndBinding> conditionsAndBindingsForType;
-            if(!bindings.TryGetValue(contractType, out conditionsAndBindingsForType))
+            if(!bindings.TryGetValue(request.ContractType, out conditionsAndBindingsForType))
                 return null;
 
-            BindingConditionContext context = new BindingConditionContext(contractType, enclosingInstance);
-
             BaseBinding binding = conditionsAndBindingsForType
-                .Where(cab => cab.Condition == null || cab.Condition(context))
+                .Where(cab => cab.Condition == null || cab.Condition(request))
                 .Select(cab => cab.Binding)
                 .FirstOrDefault();
 
             if(binding == null)
                 return null;
 
-            var instance = binding.GetInstance();
+            object instance;
+            var instanceNeedsResolve = binding.GetInstance(out instance);
+
             if(instance == null)
                 return null;
 
-            if(binding.IsNewInstance)
+            if(instanceNeedsResolve)
                 Resolve(instance);
 
             return instance;
         }
 
+        #region IInjector Members
+
         /// <inheritdoc/>
-        public TContract Get<TContract>(object enclosingInstance = null)
+        public object Get(Type contractType)
         {
-            return (TContract)Get(typeof(TContract), enclosingInstance);
+            return GetCore(new InjectorRequest(contractType, null, null));
         }
 
-        private Dictionary<Type, Tuple<PropertyInfo, InjectAttribute>[]> injectedPropertiesCache = new Dictionary<Type, Tuple<PropertyInfo, InjectAttribute>[]>();
+        /// <inheritdoc/>
+        public TContract Get<TContract>()
+        {
+            return (TContract)GetCore(new InjectorRequest(typeof(TContract), null, null));
+        }
 
-        /// <summary>
-        /// Resolves injected properties for the instance <paramref name="instance"/>.
-        /// </summary>
-        /// <typeparam name="TInstance"></typeparam>
-        /// <param name="instance"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public TInstance Resolve<TInstance>(TInstance instance)
         {
             var actualInstanceType = instance.GetType();
 
-            Tuple<PropertyInfo, InjectAttribute>[] injectedPropertiesForType;
+            PropertyInfoAndAttribute[] injectedPropertiesForType;
             if(!injectedPropertiesCache.TryGetValue(actualInstanceType, out injectedPropertiesForType))
             {
                 injectedPropertiesForType = instance
                     .GetType()
                     .GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
-                    .Select(pi => new Tuple<PropertyInfo, InjectAttribute>(pi, pi.GetCustomAttribute<InjectAttribute>()))
-                    .Where(x => x.Item2 != null)
+                    .Select(pi => new PropertyInfoAndAttribute { PropertyInfo = pi, Attribute = pi.GetCustomAttribute<InjectAttribute>(), })
+                    .Where(x => x.Attribute != null)
                     .ToArray();
 
                 injectedPropertiesCache.Add(actualInstanceType, injectedPropertiesForType);
@@ -124,9 +204,9 @@ namespace TC.Mvvm.Injector
 
             foreach(var propertyInfoAndInjectAttribute in injectedPropertiesForType)
             {
-                var propertyContractType = propertyInfoAndInjectAttribute.Item1.PropertyType;
-                var propertyValue = Get(propertyContractType, instance);
-                propertyInfoAndInjectAttribute.Item1.SetValue(instance, propertyValue);
+                var propertyContractType = propertyInfoAndInjectAttribute.PropertyInfo.PropertyType;
+                var propertyValue = GetCore(new InjectorRequest(propertyContractType, instance, propertyInfoAndInjectAttribute.Attribute));
+                propertyInfoAndInjectAttribute.PropertyInfo.SetValue(instance, propertyValue);
             }
 
             return instance;
@@ -139,12 +219,12 @@ namespace TC.Mvvm.Injector
         /// <inheritdoc/>
         public object GetService(Type serviceType)
         {
-            return Get(serviceType, null);
+            return GetCore(new InjectorRequest(serviceType, null, null));
         }
 
         #endregion
 
-        internal void AddBinding(Type contractType, Func<BindingConditionContext, bool> condition, BaseBinding binding)
+        internal void AddBinding(Type contractType, Func<InjectorRequest, bool> condition, BaseBinding binding)
         {
             List<ConditionAndBinding> conditionsAndBindingsForContractType;
             if(!bindings.TryGetValue(contractType, out conditionsAndBindingsForContractType))
