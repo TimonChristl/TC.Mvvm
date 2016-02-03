@@ -5,7 +5,7 @@
         xmlns:fs="urn:TBuild.Plugin.Filesystem"
         MinRequiredVersion="1.9.9.0">
     <Properties>
-        <Property Name="Version" Value="0.2.0"/>
+        <Property Name="Version" Value="0.2.1"/>
     </Properties>
     <Steps>
         <fs:ReadTextFile Filename="${TBuild.ScriptDir}\CommonAssemblyInfo.cs.in" Property="Temp"/>
@@ -18,12 +18,22 @@
         <core:RegexSearchAndReplace Property="Temp" Pattern="@VERSION@" Replacement="${Version}" />
         <fs:WriteTextFile Filename="${TBuild.ScriptDir}\TC.Mvvm.nuspec" Property="${Temp}"/>
 
+        <fs:ReadTextFile Filename="${TBuild.ScriptDir}\TC.Mvvm.Sources.nuspec.in" Property="Temp"/>
+        <core:RegexSearchAndReplace Property="Temp" Pattern="@VERSION@" Replacement="${Version}" />
+        <fs:WriteTextFile Filename="${TBuild.ScriptDir}\TC.Mvvm.Sources.nuspec" Property="${Temp}"/>
+
         <fs:ReadTextFile Filename="${TBuild.ScriptDir}\TC.Mvvm.Injector.nuspec.in" Property="Temp"/>
         <core:RegexSearchAndReplace Property="Temp" Pattern="@VERSION@" Replacement="${Version}" />
         <fs:WriteTextFile Filename="${TBuild.ScriptDir}\TC.Mvvm.Injector.nuspec" Property="${Temp}"/>
 
         <core:Exec Filename="${Exe.NuGet}"
                    Arguments="pack ${TBuild.ScriptDir}\TC.Mvvm.nuspec"
+                   WorkingDirectory="${TBuild.ScriptDir}"
+                   UseShellExecute="false"
+                   />
+
+        <core:Exec Filename="${Exe.NuGet}"
+                   Arguments="pack -Properties packageid=TC.Mvvm.Sources;packageversion=${Version} ${TBuild.ScriptDir}\TC.Mvvm.Sources.nuspec"
                    WorkingDirectory="${TBuild.ScriptDir}"
                    UseShellExecute="false"
                    />

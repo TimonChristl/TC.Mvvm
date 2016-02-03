@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>$packageid$</id>
+        <version>$packageversion$</version>
+        <authors>Timon Christl</authors>
+        <owners>Timon Christl</owners>
+        <projectUrl>https://github.com/TimonChristl/TC.Mvvm</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Timon Christl's MVVM utilities library</description>
+        <releaseNotes />
+        <copyright>©2015-2016 by Timon Christl</copyright>
+        <dependencies />
+    </metadata>
+    <files>
+        <file src="TC.Mvvm\DataPaths\DataPath.cs" target="content\App_Packages\$packageid$.$packageversion$\DataPaths\DataPath.cs" />
+        <file src="TC.Mvvm\DataPaths\DataPathItem.cs" target="content\App_Packages\$packageid$.$packageversion$\DataPaths\DataPathItem.cs" />
+        <file src="TC.Mvvm\DataPaths\IDataPathAddressable.cs" target="content\App_Packages\$packageid$.$packageversion$\DataPaths\IDataPathAddressable.cs" />
+        <file src="TC.Mvvm\DataPaths\IDataPathRoot.cs" target="content\App_Packages\$packageid$.$packageversion$\DataPaths\IDataPathRoot.cs" />
+        <file src="TC.Mvvm\BaseModelObj.cs" target="content\App_Packages\$packageid$.$packageversion$\BaseModelObj.cs" />
+        <file src="TC.Mvvm\BaseOperator.cs" target="content\App_Packages\$packageid$.$packageversion$\BaseOperator.cs" />
+        <file src="TC.Mvvm\BaseOperatorManager.cs" target="content\App_Packages\$packageid$.$packageversion$\BaseOperatorManager.cs" />
+        <file src="TC.Mvvm\DelegateCommand.cs" target="content\App_Packages\$packageid$.$packageversion$\DelegateCommand.cs" />
+        <file src="TC.Mvvm\IHasOwner.cs" target="content\App_Packages\$packageid$.$packageversion$\IHasOwner.cs" />
+        <file src="TC.Mvvm\IIdIndexable.cs" target="content\App_Packages\$packageid$.$packageversion$\IIdIndexable.cs" />
+        <file src="TC.Mvvm\ISelectable.cs" target="content\App_Packages\$packageid$.$packageversion$\ISelectable.cs" />
+        <file src="TC.Mvvm\ObservableCollectionSyncHelper.cs" target="content\App_Packages\$packageid$.$packageversion$\ObservableCollectionSyncHelper.cs" />
+        <file src="TC.Mvvm\ObservableCollectionWithOwner.cs" target="content\App_Packages\$packageid$.$packageversion$\ObservableCollectionWithOwner.cs" />
+        <file src="TC.Mvvm\ObservableCollectionWithOwnerIdIndexable.cs" target="content\App_Packages\$packageid$.$packageversion$\ObservableCollectionWithOwnerIdIndexable.cs" />
+        <file src="TC.Mvvm\Selection.cs" target="content\App_Packages\$packageid$.$packageversion$\Selection.cs" />
+        <file src="TC.Mvvm\ServiceProvider.cs" target="content\App_Packages\$packageid$.$packageversion$\ServiceProvider.cs" />
+    </files>
+</package>
