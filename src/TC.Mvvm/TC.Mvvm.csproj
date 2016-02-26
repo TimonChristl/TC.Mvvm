@@ -53,6 +53,7 @@
     <Compile Include="BaseModelObj.cs" />
     <Compile Include="BaseOperator.cs" />
     <Compile Include="BaseOperatorManager.cs" />
+    <Compile Include="BatchableBaseModelObj.cs" />
     <Compile Include="DataPaths\DataPath.cs" />
     <Compile Include="DataPaths\DataPathItem.cs" />
     <Compile Include="DataPaths\IDataPathRoot.cs" />
