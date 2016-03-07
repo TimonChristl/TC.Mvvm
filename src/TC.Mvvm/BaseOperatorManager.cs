@@ -231,45 +231,53 @@ namespace TC.Mvvm
         }
 
         private void AddCore(string description, TMemento beforeMemento, Action<TMemento> afterMementoFinisher, BaseOperator<TContext>[] operators)
-		{
-			if(operators.Length == 0)
-				return;
+        {
+            if(operators.Length == 0)
+                return;
 
-			Step step = new Step(description, operators);
+            OnBeforeAdd();
+            try
+            {
+                Step step = new Step(description, operators);
 
-			step.Before = beforeMemento;
+                step.Before = beforeMemento;
 
-			this.appliedSteps.Push(step);
-			this.unappliedSteps.Clear();
+                this.appliedSteps.Push(step);
+                this.unappliedSteps.Clear();
 
-			Stack<BaseOperator<TContext>> appliedOperators = new Stack<BaseOperator<TContext>>();
+                Stack<BaseOperator<TContext>> appliedOperators = new Stack<BaseOperator<TContext>>();
 
-			foreach(BaseOperator<TContext> op in operators)
-			{
-				try
-				{
-					op.Prepare(context);
-					op.Apply(context);
-					appliedOperators.Push(op);
-				}
-				catch
-				{
-					while(appliedOperators.Count > 0)
-						appliedOperators.Pop().Unapply(context);
-					throw;
-				}
-			}
+                foreach(BaseOperator<TContext> op in operators)
+                {
+                    try
+                    {
+                        op.Prepare(context);
+                        op.Apply(context);
+                        appliedOperators.Push(op);
+                    }
+                    catch
+                    {
+                        while(appliedOperators.Count > 0)
+                            appliedOperators.Pop().Unapply(context);
+                        throw;
+                    }
+                }
 
-			step.After = CreateMemento(context);
-            if(afterMementoFinisher != null)
-                afterMementoFinisher(step.After);
+                step.After = CreateMemento(context);
+                if(afterMementoFinisher != null)
+                    afterMementoFinisher(step.After);
 
-            LimitAppliedStepsToMaxSteps();
+                LimitAppliedStepsToMaxSteps();
 
-            OnPropertyChanged("CanUndo");
-			OnPropertyChanged("CanRedo");
-			OnChanged();
-		}
+                OnPropertyChanged("CanUndo");
+                OnPropertyChanged("CanRedo");
+                OnChanged();
+            }
+            finally
+            {
+                OnAfterAdd();
+            }
+        }
 
         private void LimitAppliedStepsToMaxSteps()
         {
@@ -429,13 +437,41 @@ namespace TC.Mvvm
 				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		#region INotifyPropertyChanged Members
+        /// <summary>
+        /// Fires the <see cref="BeforeAdd"/> event.
+        /// </summary>
+        protected virtual void OnBeforeAdd()
+        {
+            if(BeforeAdd != null)
+                BeforeAdd(this, EventArgs.Empty);
+        }
 
-		/// <inheritdoc/>
-		public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// Fires the <see cref="AfterAdd"/> event.
+        /// </summary>
+        protected virtual void OnAfterAdd()
+        {
+            if(AfterAdd != null)
+                AfterAdd(this, EventArgs.Empty);
+        }
 
-		#endregion
+        #region INotifyPropertyChanged Members
 
-	}
+        /// <inheritdoc/>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        /// <summary>
+        /// Event that is fired before adding a list of operators.
+        /// </summary>
+        public event EventHandler BeforeAdd;
+
+        /// <summary>
+        /// Event that is fired after adding a list of operators.
+        /// </summary>
+        public event EventHandler AfterAdd;
+
+    }
 
 }
