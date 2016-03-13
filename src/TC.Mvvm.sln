@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TC.Mvvm", "TC.Mvvm\TC.Mvvm.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TC.Mvvm.Tests", "TC.Mvvm.Tests\TC.Mvvm.Tests.csproj", "{4CFB6399-C88E-47A8-837E-7AEAAF7FD7DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TC.Mvvm.Injector", "TC.Mvvm.Injector\TC.Mvvm.Injector.csproj", "{32D2A9D7-B8A7-4D60-B0A8-8F9308B9B340}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TC.Mvvm.Injector.Tests", "TC.Mvvm.Injector.Tests\TC.Mvvm.Injector.Tests.csproj", "{9FC88041-EFF6-4650-92DB-A1C741CE95E0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,14 +21,6 @@ Global
 		{4CFB6399-C88E-47A8-837E-7AEAAF7FD7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CFB6399-C88E-47A8-837E-7AEAAF7FD7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CFB6399-C88E-47A8-837E-7AEAAF7FD7DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{32D2A9D7-B8A7-4D60-B0A8-8F9308B9B340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{32D2A9D7-B8A7-4D60-B0A8-8F9308B9B340}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{32D2A9D7-B8A7-4D60-B0A8-8F9308B9B340}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{32D2A9D7-B8A7-4D60-B0A8-8F9308B9B340}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9FC88041-EFF6-4650-92DB-A1C741CE95E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FC88041-EFF6-4650-92DB-A1C741CE95E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FC88041-EFF6-4650-92DB-A1C741CE95E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FC88041-EFF6-4650-92DB-A1C741CE95E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
