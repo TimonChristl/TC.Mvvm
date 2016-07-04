@@ -8,41 +8,56 @@ using System.Windows.Input;
 namespace TC.Mvvm
 {
 
+    /// <summary>
+    /// An <see cref="ICommand"/> implementation that uses delegates for <see cref="ICommand.CanExecute(object)"/> and
+    /// <see cref="ICommand.Execute(object)"/>.
+    /// </summary>
 	public class DelegateCommand : ICommand
-	{
+    {
 
-		private Func<object, bool> canExecute;
-		private Action<object> execute;
+        private Func<object, bool> canExecute;
+        private Action<object> execute;
 
-		public DelegateCommand(Func<object, bool> canExecute, Action<object> execute)
-		{
-			this.canExecute = canExecute;
-			this.execute = execute;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DelegateCommand"/>.
+        /// </summary>
+        /// <param name="canExecute"></param>
+        /// <param name="execute"></param>
+        public DelegateCommand(Func<object, bool> canExecute, Action<object> execute)
+        {
+            this.canExecute = canExecute;
+            this.execute = execute;
+        }
 
-		public void FireCanExecuteChanged()
-		{
-			if(CanExecuteChanged != null)
-				CanExecuteChanged(this, EventArgs.Empty);
-		}
+        /// <summary>
+        /// Fires the <see cref="CanExecuteChanged"/> event.
+        /// </summary>
+        public void FireCanExecuteChanged()
+        {
+            if(CanExecuteChanged != null)
+                CanExecuteChanged(this, EventArgs.Empty);
+        }
 
-		#region ICommand Members
+        #region ICommand Members
 
-		public bool CanExecute(object parameter)
-		{
-			return canExecute != null ? canExecute(parameter) : false;
-		}
+        /// <inheritdoc/>
+        public bool CanExecute(object parameter)
+        {
+            return canExecute != null ? canExecute(parameter) : false;
+        }
 
-		public event EventHandler CanExecuteChanged;
+        /// <inheritdoc/>
+        public event EventHandler CanExecuteChanged;
 
-		public void Execute(object parameter)
-		{
-			if(execute != null)
-				execute(parameter);
-		}
+        /// <inheritdoc/>
+        public void Execute(object parameter)
+        {
+            if(execute != null)
+                execute(parameter);
+        }
 
-		#endregion
+        #endregion
 
-	}
+    }
 
 }

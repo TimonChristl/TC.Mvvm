@@ -7,12 +7,19 @@ using System.Threading.Tasks;
 namespace TC.Mvvm
 {
 
-	public interface IHasOwner<TOwner>
-		where TOwner : class
-	{
+    /// <summary>
+    /// Defines that the object has an owner of type <typeparamref name="TOwner"/>.
+    /// </summary>
+    /// <typeparam name="TOwner"></typeparam>
+    public interface IHasOwner<TOwner>
+        where TOwner : class
+    {
 
-		TOwner Owner { get; set; }
+        /// <summary>
+        /// Owner of this object.
+        /// </summary>
+        TOwner Owner { get; set; }
 
-	}
+    }
 
 }

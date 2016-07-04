@@ -136,20 +136,20 @@ namespace TC.Mvvm
         ~UpdateBatch()
         {
             if(!isDisposed)
-                DisposeCore(false);
+                Dispose(false);
         }
 
         public void Dispose()
         {
             if(!isDisposed)
             {
-                DisposeCore(true);
+                Dispose(true);
                 isDisposed = true;
                 GC.SuppressFinalize(this);
             }
         }
 
-        private void DisposeCore(bool disposing)
+        private void Dispose(bool disposing)
         {
             if(disposing)
             {

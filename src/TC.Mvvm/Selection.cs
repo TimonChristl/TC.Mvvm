@@ -8,50 +8,65 @@ using System.Threading.Tasks;
 namespace TC.Mvvm
 {
 
-	public class Selection : ObservableCollection<ISelectable>
-	{
+    /// <summary>
+    /// Represents a collection of selectable objects (<see cref="ISelectable"/>). For convenience in WPF applications, this class is a descendant of
+    /// <see cref="ObservableCollection{T}"/>.
+    /// </summary>
+    public class Selection : ObservableCollection<ISelectable>
+    {
 
-		public Selection()
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of <see cref="Selection"/> as an empty selection.
+        /// </summary>
+        public Selection()
+        {
+        }
 
-		public Selection(IEnumerable<ISelectable> items)
-			: base(items)
-		{
-			foreach(ISelectable item in items)
-				item.IsSelected = true;
-		}
+        /// <summary>
+        /// Initializes a new instance of <see cref="Selection"/> with the given set of selectable items.
+        /// </summary>
+        /// <param name="items"></param>
+        public Selection(IEnumerable<ISelectable> items)
+            : base(items)
+        {
+            foreach(ISelectable item in items)
+                item.IsSelected = true;
+        }
 
-		protected override void ClearItems()
-		{
-			foreach(ISelectable node in this)
-				node.IsSelected = false;
+        /// <inheritdoc/>
+        protected override void ClearItems()
+        {
+            foreach(ISelectable node in this)
+                node.IsSelected = false;
 
-			base.ClearItems();
-		}
+            base.ClearItems();
+        }
 
-		protected override void InsertItem(int index, ISelectable item)
-		{
-			item.IsSelected = true;
+        /// <inheritdoc/>
+        protected override void InsertItem(int index, ISelectable item)
+        {
+            item.IsSelected = true;
 
-			base.InsertItem(index, item);
-		}
+            base.InsertItem(index, item);
+        }
 
-		protected override void RemoveItem(int index)
-		{
-			this[index].IsSelected = false;
+        /// <inheritdoc/>
+        protected override void RemoveItem(int index)
+        {
+            this[index].IsSelected = false;
 
-			base.RemoveItem(index);
-		}
+            base.RemoveItem(index);
+        }
 
-		protected override void SetItem(int index, ISelectable item)
-		{
-			this[index].IsSelected = false;
-			item.IsSelected = true;
+        /// <inheritdoc/>
+        protected override void SetItem(int index, ISelectable item)
+        {
+            this[index].IsSelected = false;
+            item.IsSelected = true;
 
-			base.SetItem(index, item);
-		}
+            base.SetItem(index, item);
+        }
 
-	}
+    }
 
 }
