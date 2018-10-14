@@ -309,6 +309,8 @@ namespace TC.Mvvm
         /// </summary>
         public void Undo()
         {
+            OnBeforeUndo();
+
             Step step = this.appliedSteps.Pop();
             this.unappliedSteps.Push(step);
 
@@ -320,6 +322,7 @@ namespace TC.Mvvm
             OnPropertyChanged("CanUndo");
             OnPropertyChanged("CanRedo");
             OnChanged();
+            OnAfterUndo();
         }
 
         /// <summary>
@@ -329,6 +332,8 @@ namespace TC.Mvvm
         /// </summary>
         public void Redo()
         {
+            OnBeforeRedo();
+
             Step step = this.unappliedSteps.Pop();
             this.appliedSteps.Push(step);
 
@@ -340,6 +345,7 @@ namespace TC.Mvvm
             OnPropertyChanged("CanUndo");
             OnPropertyChanged("CanRedo");
             OnChanged();
+            OnAfterRedo();
         }
 
         /// <summary>
@@ -465,6 +471,42 @@ namespace TC.Mvvm
                 AfterAdd(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Fires the <see cref="BeforeUndo"/> event.
+        /// </summary>
+        protected virtual void OnBeforeUndo()
+        {
+            if(BeforeUndo != null)
+                BeforeUndo(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Fires the <see cref="AfterUndo"/> event.
+        /// </summary>
+        protected virtual void OnAfterUndo()
+        {
+            if(AfterUndo != null)
+                AfterUndo(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Fires the <see cref="BeforeRedo"/> event.
+        /// </summary>
+        protected virtual void OnBeforeRedo()
+        {
+            if(BeforeRedo != null)
+                BeforeRedo(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Fires the <see cref="AfterRedo"/> event.
+        /// </summary>
+        protected virtual void OnAfterRedo()
+        {
+            if(AfterRedo != null)
+                AfterRedo(this, EventArgs.Empty);
+        }
+
         #region INotifyPropertyChanged Members
 
         /// <inheritdoc/>
@@ -481,6 +523,26 @@ namespace TC.Mvvm
         /// Event that is fired after adding a list of operators.
         /// </summary>
         public event EventHandler AfterAdd;
+
+        /// <summary>
+        /// Event that is fired before undoing a step.
+        /// </summary>
+        public event EventHandler BeforeUndo;
+
+        /// <summary>
+        /// Event that is fired after undoing a step.
+        /// </summary>
+        public event EventHandler AfterUndo;
+
+        /// <summary>
+        /// Event that is fired before redoing a step.
+        /// </summary>
+        public event EventHandler BeforeRedo;
+
+        /// <summary>
+        /// Event that is fired after redoing a step.
+        /// </summary>
+        public event EventHandler AfterRedo;
 
     }
 
