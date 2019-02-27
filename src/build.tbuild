@@ -3,7 +3,7 @@
         xmlns:core="urn:TBuild.Plugin.Core"
         xmlns:msbuild="urn:TBuild.Plugin.MsBuild"
         xmlns:fs="urn:TBuild.Plugin.Filesystem"
-        MinRequiredVersion="1.10.09.0">
+        MinRequiredVersion="1.10.0.0">
     <Properties>
         <Property Name="Version" Value="1.0.0"/>
     </Properties>
