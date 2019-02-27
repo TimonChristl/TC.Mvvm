@@ -1,85 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AB6FA15A-21B7-4858-B40A-24567385F333}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TC.Mvvm</RootNamespace>
-    <AssemblyName>TC.Mvvm</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+      <TargetFrameworks>netstandard2.0</TargetFrameworks>
+      <Version>1.0.0</Version>
+      <Authors></Authors>
+      <Copyright>©2015-2019 by Timon Christl</Copyright>
+      <PackageProjectUrl>https://github.com/TimonChristl/TC.Mvvm</PackageProjectUrl>
+      <PackageLicenseUrl>https://github.com/TimonChristl/TC.Mvvm/blob/master/LICENSE</PackageLicenseUrl>
+      <RepositoryUrl></RepositoryUrl>
+      <Company />
+      <SignAssembly>true</SignAssembly>
+      <AssemblyOriginatorKeyFile>TC.snk</AssemblyOriginatorKeyFile>
+      <Description>Timon Christl's MVVM utilities library</Description>
+      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\TC.Mvvm.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\TC.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="BaseModelObj.cs" />
-    <Compile Include="BaseOperator.cs" />
-    <Compile Include="BaseOperatorManager.cs" />
-    <Compile Include="BatchableBaseModelObj.cs" />
-    <Compile Include="DataPaths\DataPath.cs" />
-    <Compile Include="DataPaths\DataPathItem.cs" />
-    <Compile Include="DataPaths\IDataPathRoot.cs" />
-    <Compile Include="DelegateCommand.cs" />
-    <Compile Include="DataPaths\IDataPathAddressable.cs" />
-    <Compile Include="IHasOwner.cs" />
-    <Compile Include="IIdIndexable.cs" />
-    <Compile Include="ISelectable.cs" />
-    <Compile Include="ObservableCollectionSyncHelper.cs" />
-    <Compile Include="ObservableCollectionWithOwner.cs" />
-    <Compile Include="ObservableCollectionWithOwnerIdIndexable.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Selection.cs" />
-    <Compile Include="ServiceProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\TC.snk">
-      <Link>TC.snk</Link>
-    </None>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
+
