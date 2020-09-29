@@ -53,6 +53,10 @@ namespace TC.Mvvm
                 this.operators = operators;
                 this.type = type;
             }
+
+            public string Description => description;
+            public BaseOperator<TContext>[] Operators => operators;
+            public UndoHistoryItemType Type => type;
         }
 
         private TContext context;

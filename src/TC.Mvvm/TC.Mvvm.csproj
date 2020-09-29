@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
       <TargetFrameworks>netstandard2.0</TargetFrameworks>
-      <Version>1.1.0</Version>
+      <Version>1.1.1</Version>
       <Authors></Authors>
       <Copyright>©2015-2020 by Timon Christl</Copyright>
       <PackageProjectUrl>https://github.com/TimonChristl/TC.Mvvm</PackageProjectUrl>
@@ -13,6 +13,8 @@
       <AssemblyOriginatorKeyFile>TC.snk</AssemblyOriginatorKeyFile>
       <Description>Timon Christl's MVVM utilities library</Description>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <AssemblyVersion>1.1.1.0</AssemblyVersion>
+      <FileVersion>1.1.1.0</FileVersion>
   </PropertyGroup>
 </Project>
 
