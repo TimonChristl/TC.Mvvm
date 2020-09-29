@@ -26,3 +26,10 @@ jobs:
     - name: Test
       working-directory: src
       run: dotnet test --no-restore --verbosity normal
+    - name: Upload
+      uses: actions/upload-artifact@v2.1.4
+      with:
+        path: src/TC.Mvvm/bin/Release/*.nupkg
+        if-no-files-found: error
+      
+     
