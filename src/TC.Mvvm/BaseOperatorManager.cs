@@ -41,6 +41,20 @@ namespace TC.Mvvm
             }
         }
 
+        public class UndoHistoryItem
+        {
+            private string description;
+            private BaseOperator<TContext>[] operators;
+            private UndoHistoryItemType type;
+
+            public UndoHistoryItem(string description, BaseOperator<TContext>[] operators, UndoHistoryItemType type)
+            {
+                this.description = description;
+                this.operators = operators;
+                this.type = type;
+            }
+        }
+
         private TContext context;
         private int maxSteps;
         private Stack<Step> appliedSteps = new Stack<Step>();
@@ -421,6 +435,17 @@ namespace TC.Mvvm
             }
         }
 
+        public IEnumerable<UndoHistoryItem> GetUndoHistory()
+        {
+            foreach(var step in appliedSteps.Reverse())
+                yield return new UndoHistoryItem(step.Description, step.Operators, UndoHistoryItemType.Applied);
+
+            yield return new UndoHistoryItem(null, Array.Empty<BaseOperator<TContext>>(), UndoHistoryItemType.Current);
+
+            foreach(var step in unappliedSteps)
+                yield return new UndoHistoryItem(step.Description, step.Operators, UndoHistoryItemType.Unapplied);
+        }
+
         /// <summary>
         /// Fires the <see cref="Changed"/> event.
         /// </summary>
@@ -546,4 +571,10 @@ namespace TC.Mvvm
 
     }
 
+    public enum UndoHistoryItemType
+    {
+        Applied,
+        Current,
+        Unapplied,
+    }
 }
