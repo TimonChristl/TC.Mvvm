@@ -6,8 +6,8 @@
 /src/TC.Mvvm.v12.suo
 /src/TC.Mvvm/obj
 /src/TC.Mvvm/bin
-/src/TC.Mvvm.Tests/bin/Release
-/src/TC.Mvvm.Tests/obj/Release
+/src/TC.Mvvm.TestsNew/bin
+/src/TC.Mvvm.TestsNew/obj
 /src/.vs/TC.Mvvm/v14
 /src/TC.Mvvm.Injector.Tests/obj/Release
 /src/TC.Mvvm.Injector.Tests/bin/Release
