@@ -3,21 +3,8 @@
 ################################################################################
 
 /src/TC.Mvvm/TC.Mvvm.csproj.user
-/src/TC.Mvvm.v12.suo
 /src/TC.Mvvm/obj
 /src/TC.Mvvm/bin
-/src/TC.Mvvm.Tests/bin/Release
-/src/TC.Mvvm.Tests/obj/Release
-/src/.vs/TC.Mvvm/v14
-/src/TC.Mvvm.Injector.Tests/obj/Release
-/src/TC.Mvvm.Injector.Tests/bin/Release
-/src/TC.Mvvm.Injector/obj/Release
-/src/TC.Mvvm.Injector/bin/Release
-/src/TC.Mvvm.Tests/bin/Debug
-/src/TC.Mvvm.Tests/obj/Debug
-/src/TC.Mvvm.Injector.Tests/obj/Debug
-/src/TC.Mvvm.Injector.Tests/bin/Debug
-/src/TC.Mvvm.Injector/obj/Debug
-/src/TC.Mvvm.Injector/bin/Debug
-/src/TC.Mvvm.0.2.1.nupkg
+/src/TC.Mvvm.Tests2/bin
+/src/TC.Mvvm.Tests2/obj
 /src/.vs

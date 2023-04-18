@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace TC.Mvvm.Tests
+namespace TC.Mvvm.Tests2
 {
 
     [TestClass]
